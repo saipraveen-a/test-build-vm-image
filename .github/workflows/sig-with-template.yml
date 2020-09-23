@@ -101,6 +101,7 @@ jobs:
       with:        
         resource-group-name: 'sai-rg'
         location: 'eastus'
+        image-builder-template-name: '${{ GITHUB.WORKSPACE }}/workflow-artifacts/homework/template.json'
         managed-identity: 'AIB-Managed-Identity-EastUS'
         source-os-type: 'linux'
         source-image-type: 'PlatformImage'
