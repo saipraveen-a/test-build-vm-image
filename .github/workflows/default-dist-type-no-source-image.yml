@@ -21,3 +21,4 @@ jobs:
         resource-group-name: 'sai-rg'
         location: 'eastus'
         managed-identity: 'AIB-Managed-Identity-EastUS'
+        source-os-type: 'linux'
