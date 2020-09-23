@@ -1,3 +1,4 @@
+# This workflow should trigger AIB with default dist type
 on:
   push:
     branches:
