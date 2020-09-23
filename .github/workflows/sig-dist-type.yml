@@ -1,7 +1,7 @@
 on:
   push:
-    branches:
-      - sig-dist-type
+    paths:
+      - .github/workflows/sig-dist-type.yml
 jobs:      
   job1:
     runs-on: ubuntu-latest
