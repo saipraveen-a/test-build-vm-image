@@ -26,4 +26,4 @@ jobs:
         source-image-type: 'PlatformImage'
         source-image: Canonical:UbuntuServer:18.04-LTS:latest
         dist-type: VHD
-        dist-image-tags: tag1:value1, tag2:value2
+        dist-image-tags: 'tag1:value1,tag2:value2'
