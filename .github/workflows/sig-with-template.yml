@@ -19,7 +19,7 @@ jobs:
               "type": "Microsoft.VirtualMachineImages/imageTemplates",
               "location": "eastus",
               "tags": {
-              "imagebuilderTemplate": "test-sig-with-template",
+              "imagebuilderTemplate": "test-sig-with-template-1",
               "userIdentity": "enabled"
               },
               "identity": {
