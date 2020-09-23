@@ -1,0 +1,30 @@
+on:
+  push:
+    paths:
+      - .github/workflows/sig-dist-type.yml
+jobs:      
+  job1:
+    runs-on: ubuntu-latest
+    name: Create Custom Linux Image
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    
+    - name: Login via Az module
+      uses: azure/login@v1
+      with:
+        creds: ${{secrets.AZURE_CREDENTIALS}}
+    
+    - name: Build and Distribute Custom VM Image
+      uses: azure/build-vm-image@v0
+      with:        
+        resource-group-name: 'sai-rg'
+        location: 'eastus'
+        managed-identity: 'AIB-Managed-Identity-EastUS'
+        source-os-type: 'linux'
+        source-image-type: 'PlatformImage'
+        source-image: Canonical:UbuntuServer:18.04-LTS:latest
+        dist-type: SharedImageGallery
+        dist-resource-id: subscriptions/8311baa7-d15a-484b-a61a-952ac8688353/resourceGroups/sai-rg/providers/Microsoft.Compute/galleries/sharedimagegallery/images/aib-image
+        dist-image-tags: tag1:value1, tag2:value2
+        dist-location: eastus
