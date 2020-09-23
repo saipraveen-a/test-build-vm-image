@@ -1,6 +1,6 @@
 on: 
   push:
-    branches: customizer-script-default-dist-type
+    paths: .github/workflows/customizer-script-default-dist-type
 
 jobs:      
   job1:
