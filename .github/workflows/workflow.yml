@@ -22,6 +22,6 @@ jobs:
         source-os-type: 'linux'
         source-image-type: 'PlatformImage'
         source-image: Canonical:UbuntuServer:18.04-LTS:latest
-        distributor-type: SharedImageGallery
+        dist-type: SharedImageGallery
         dist-resource-id: subscriptions/8311baa7-d15a-484b-a61a-952ac8688353/resourceGroups/sai-rg/providers/Microsoft.Compute/galleries/sharedimagegallery/images/aib-image
         dist-image-tags: tag1:value1, tag2:value2
