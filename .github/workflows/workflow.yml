@@ -22,3 +22,5 @@ jobs:
         source-os-type: 'linux'
         source-image-type: 'PlatformImage'
         source-image: Canonical:UbuntuServer:18.04-LTS:latest
+        distributor-type: VHD
+        dist-image-tags: tag1:value1, tag2:value2
