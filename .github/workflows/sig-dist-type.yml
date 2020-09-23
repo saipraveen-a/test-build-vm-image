@@ -1,5 +1,7 @@
-on: push
-
+on:
+  push:
+    branches:
+      - sig-dist-type
 jobs:      
   job1:
     runs-on: ubuntu-latest
@@ -25,3 +27,4 @@ jobs:
         dist-type: SharedImageGallery
         dist-resource-id: subscriptions/8311baa7-d15a-484b-a61a-952ac8688353/resourceGroups/sai-rg/providers/Microsoft.Compute/galleries/sharedimagegallery/images/aib-image
         dist-image-tags: tag1:value1, tag2:value2
+        dist-location: eastus
