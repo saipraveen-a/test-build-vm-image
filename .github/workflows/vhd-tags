@@ -1,7 +1,7 @@
 on:
   push:
     paths:
-      - .github/workflows/aib-vhd-tags.yml
+      - .github/workflows/vhd-tags.yml
       
 jobs:      
   job1:
