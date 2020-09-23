@@ -22,3 +22,4 @@ jobs:
         location: 'eastus'
         managed-identity: 'AIB-Managed-Identity-EastUS'
         source-os-type: 'linux'
+        source-image: Canonical:UbuntuServer:18.04-LTS:latest
