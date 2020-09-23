@@ -1,5 +1,8 @@
-on: push
-
+on:
+  push:
+    branches:
+      - default-dist-type
+      
 jobs:      
   job1:
     runs-on: ubuntu-latest
