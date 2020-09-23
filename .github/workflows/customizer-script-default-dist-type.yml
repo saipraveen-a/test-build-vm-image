@@ -1,4 +1,6 @@
-on: push
+on: 
+  push:
+    branches: customizer-script-default-dist-type
 
 jobs:      
   job1:
