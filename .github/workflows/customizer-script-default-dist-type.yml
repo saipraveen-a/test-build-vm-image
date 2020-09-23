@@ -8,12 +8,18 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
     
+    - name: Create Workflow Artifacts
+      run: |
+        cd  "$GITHUB_WORKFLOW"
+        mkdir worflow-artifacts/        
+        echo "echo Installing World... " > $GITHUB_WORKSPACE/workflow-artifacts/install-world.sh
+    
     - name: Login via Az module
       uses: azure/login@v1
       with:
         creds: ${{secrets.AZURE_CREDENTIALS}}
     
-    - name: Build and Distribute Custom VM Image
+    - name: Build and Distribute Custom VM Image      
       uses: azure/build-vm-image@v0
       with:        
         resource-group-name: 'sai-rg'
@@ -22,6 +28,8 @@ jobs:
         source-os-type: 'linux'
         source-image-type: 'PlatformImage'
         source-image: Canonical:UbuntuServer:18.04-LTS:latest
-        dist-type: SharedImageGallery
-        dist-resource-id: subscriptions/8311baa7-d15a-484b-a61a-952ac8688353/resourceGroups/sai-rg/providers/Microsoft.Compute/galleries/sharedimagegallery/images/aib-image
-        dist-image-tags: tag1:value1, tag2:value2
+        customizer-source: ${{ GITHUB.WORKSPACE }}/workflow_artifacts
+        customizer-script: |
+          sudo mkdir /buildArtifacts
+          sudo cp -r /tmp/ /buildArtifacts/
+          sh /buildArtifacts/workflow-artifacts/install-world.sh
