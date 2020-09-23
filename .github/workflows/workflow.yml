@@ -10,7 +10,6 @@ jobs:
     
     - name: Create Workflow Artifacts
       run: |
-        cd  "$GITHUB_WORKFLOW"
         mkdir worflow-artifacts/        
         echo "echo Installing World... " > $GITHUB_WORKSPACE/workflow-artifacts/install-world.sh
     
@@ -19,7 +18,7 @@ jobs:
       with:
         creds: ${{secrets.AZURE_CREDENTIALS}}
     
-    - name: Build and Distribute Custom VM Image      
+    - name: Build and Distribute Custom VM Image
       uses: azure/build-vm-image@v0
       with:        
         resource-group-name: 'sai-rg'
