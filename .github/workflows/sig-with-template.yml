@@ -25,7 +25,7 @@ jobs:
               "identity": {
                   "type": "UserAssigned",
                   "userAssignedIdentities": {
-                      "subscriptions/8311baa7-d15a-484b-a61a-952ac8688353/resourceGroups/sai-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/AIB-Managed-Identity-EastUS": {}
+                      "/subscriptions/8311baa7-d15a-484b-a61a-952ac8688353/resourceGroups/sai-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/AIB-Managed-Identity-EastUS": {}
                   }
               },
               "properties": {
