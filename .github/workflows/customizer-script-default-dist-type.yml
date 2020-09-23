@@ -1,0 +1,37 @@
+on: 
+  push:
+    paths: .github/workflows/customizer-script-default-dist-type.yml
+
+jobs:      
+  job1:
+    runs-on: ubuntu-latest
+    name: Create Custom Linux Image
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    
+    - name: Create Workflow Artifacts
+      run: |
+        cd  "$GITHUB_WORKFLOW"
+        mkdir worflow-artifacts/        
+        echo "echo Installing World... " > $GITHUB_WORKSPACE/workflow-artifacts/install-world.sh
+    
+    - name: Login via Az module
+      uses: azure/login@v1
+      with:
+        creds: ${{secrets.AZURE_CREDENTIALS}}
+    
+    - name: Build and Distribute Custom VM Image      
+      uses: azure/build-vm-image@v0
+      with:        
+        resource-group-name: 'sai-rg'
+        location: 'eastus'
+        managed-identity: 'AIB-Managed-Identity-EastUS'
+        source-os-type: 'linux'
+        source-image-type: 'PlatformImage'
+        source-image: Canonical:UbuntuServer:18.04-LTS:latest
+        customizer-source: ${{ GITHUB.WORKSPACE }}/workflow_artifacts
+        customizer-script: |
+          sudo mkdir /buildArtifacts
+          sudo cp -r /tmp/ /buildArtifacts/
+          sh /buildArtifacts/workflow-artifacts/install-world.sh
