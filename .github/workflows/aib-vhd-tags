@@ -1,5 +1,8 @@
-on: push
-
+on:
+  push:
+    paths:
+      - .github/workflows/aib-vhd-tags.yml
+      
 jobs:      
   job1:
     runs-on: ubuntu-latest
