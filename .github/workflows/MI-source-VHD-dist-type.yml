@@ -1,7 +1,7 @@
 on:
   push:
     paths:
-      - .github/workflows/vhd-tags.yml
+      - .github/workflows/MI-source-VHD-dist-type.yml
       
 jobs:      
   job1:
