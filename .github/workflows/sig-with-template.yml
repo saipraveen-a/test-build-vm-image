@@ -1,0 +1,115 @@
+on:
+  push:
+    paths:
+      - .github/workflows/sig-with-template.yml
+jobs:      
+  job1:
+    runs-on: ubuntu-latest
+    name: Create Custom Linux Image
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - shell: bash
+      run: |
+        mkdir -p workflow-artifacts
+        mkdir -p workflow-artifacts/homework
+        echo Hello world 1! > workflow-artifacts/homework/hello-world.txt 
+        echo Hello world 2 > workflow-artifacts/homework/hello-world2.txt 
+        echo '{
+              "type": "Microsoft.VirtualMachineImages/imageTemplates",
+              "location": "eastus",
+              "tags": {
+              "imagebuilderTemplate": "test-sig-with-template",
+              "userIdentity": "enabled"
+              },
+              "identity": {
+                  "type": "UserAssigned",
+                  "userAssignedIdentities": {
+                      "subscriptions/8311baa7-d15a-484b-a61a-952ac8688353/resourceGroups/sai-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/AIB-Managed-Identity-EastUS": {}
+                  }
+              },
+              "properties": {
+                  "buildTimeoutInMinutes": 80,
+                  "vmProfile": {
+                      "vmSize": "Standard_D1_v2",
+                      "osDiskSizeGB": 136
+                  },
+                  "source": {
+                      "type": "PlatformImage",
+                      "publisher": "Canonical",
+                      "offer": "UbuntuServer",
+                      "sku": "18.04-DAILY-LTS",
+                      "version": "latest"
+                  },
+              "customize": [
+                      {
+                          "type": "Shell",
+                          "name": "RunScriptFromSource",
+                          "scriptUri": "https://raw.githubusercontent.com/danielsollondon/azvmimagebuilder/master/quickquickstarts/customizeScript.sh"
+                      },
+                      {
+                          "type": "Shell",
+                          "name": "CheckSumCompareShellScript",
+                          "scriptUri": "https://raw.githubusercontent.com/danielsollondon/azvmimagebuilder/master/quickquickstarts/customizeScript2.sh",
+                          "sha256Checksum": "ade4c5214c3c675e92c66e2d067a870c5b81b9844b3de3cc72c49ff36425fc93"
+                      },
+                      {
+                          "type": "File",
+                          "name": "downloadBuildArtifacts",
+                          "sourceUri": "https://raw.githubusercontent.com/danielsollondon/azvmimagebuilder/master/quickquickstarts/exampleArtifacts/buildArtifacts/index.html",
+                          "destination": "/tmp/index.html"
+                      },
+                      {
+                          "type": "Shell",
+                          "name": "setupBuildPath",
+                          "inline": [
+                              "sudo mkdir -p /buildArtifacts",
+                              "sudo cp /tmp/index.html /buildArtifacts/index.html"
+                          ]
+                      },
+                      {
+                          "type": "Shell",
+                          "name": "InstallUpgrades",
+                          "inline": [
+                              "sudo apt install unattended-upgrades"
+                          ]
+                      }
+                  ],
+                  "distribute": [
+                      {
+                          "type": "SharedImage",
+                          "galleryImageId": "/subscriptions/8311baa7-d15a-484b-a61a-952ac8688353/resourcegroups/sai-rg/providers/Microsoft.Compute/galleries/sharedimagegallery/images/aib-image-with-template",
+                          "runOutputName": "",
+                          "artifactTags": {
+                              "source": "azureVmImageBuilder",
+                              "baseosimg": "ubuntu1804"
+                          },
+                          "replicationRegions": [
+                              "westus"
+                          ]
+                      }
+                  ]
+              }
+            }' > workflow-artifacts/homework/template.json
+    - name: Login via Az module
+      uses: azure/login@v1
+      with:
+        creds: ${{secrets.AZURE_CREDENTIALS}}
+    
+    - name: Build and Distribute Custom VM Image
+      uses: azure/build-vm-image@v0
+      with:        
+        resource-group-name: 'sai-rg'
+        location: 'eastus'
+        managed-identity: 'AIB-Managed-Identity-EastUS'
+        source-os-type: 'linux'
+        source-image-type: 'PlatformImage'
+        source-image: Canonical:UbuntuServer:18.04-LTS:latest
+        dist-type: SharedImageGallery
+        dist-resource-id: subscriptions/8311baa7-d15a-484b-a61a-952ac8688353/resourceGroups/sai-rg/providers/Microsoft.Compute/galleries/sharedimagegallery/images/aib-image
+        dist-image-tags: tag1:value1,tag2:value2,tag3:value3
+        dist-location: eastus
+        customizer-source: '${{ GITHUB.WORKSPACE }}/workflow-artifacts/homework'
+        customizer-script: |
+          sudo mkdir -p /buildartifacts
+          sudo cp -r /tmp/homework/ /buildartifacts/
