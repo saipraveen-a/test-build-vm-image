@@ -1,0 +1,26 @@
+on:
+  push:
+    paths: .github/workflows/MI-source-default-dist-type.yml
+    
+jobs:      
+  job1:
+    runs-on: ubuntu-latest
+    name: Create Custom Linux Image
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    
+    - name: Login via Az module
+      uses: azure/login@v1
+      with:
+        creds: ${{secrets.AZURE_CREDENTIALS}}
+    
+    - name: Build and Distribute Custom VM Image
+      uses: azure/build-vm-image@v0
+      with:        
+        resource-group-name: 'sai-rg'
+        location: 'eastus'
+        managed-identity: 'AIB-Managed-Identity-EastUS'
+        source-os-type: 'linux'
+        source-image-type: 'ManagedImage'
+        source-image: /subscriptions/8311baa7-d15a-484b-a61a-952ac8688353/resourceGroups/sai-rg/providers/Microsoft.Compute/images/mi_1600864645897
