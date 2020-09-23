@@ -1,7 +1,7 @@
 on:
   push:
-    branches:
-      - vhd-dist-type
+    paths:
+      - .github/workflows/aib-vhd-tags.yml
       
 jobs:      
   job1:
