@@ -1,6 +1,6 @@
 on:
   push:
-    paths: .github/workflows/aib-default-dist-type.yml
+    paths: .github/workflows/default-dist-type.yml
     
 jobs:      
   job1:
