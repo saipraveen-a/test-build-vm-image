@@ -1,0 +1,23 @@
+on:
+  push:
+    paths: .github/workflows/default-dist-type-no-source-image.yml
+    
+jobs:      
+  job1:
+    runs-on: ubuntu-latest
+    name: Create Custom Linux Image
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    
+    - name: Login via Az module
+      uses: azure/login@v1
+      with:
+        creds: ${{secrets.AZURE_CREDENTIALS}}
+    
+    - name: Build and Distribute Custom VM Image
+      uses: azure/build-vm-image@v0
+      with:        
+        resource-group-name: 'sai-rg'
+        location: 'eastus'
+        managed-identity: 'AIB-Managed-Identity-EastUS'
